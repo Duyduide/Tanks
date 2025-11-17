@@ -4904,7 +4904,7 @@ GameObject:
   - component: {fileID: 19921400}
   - component: {fileID: 8232052}
   m_Layer: 0
-  m_Name: TankExplosion
+  m_Name: TankExplosion v1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4935,7 +4935,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 151086}
   serializedVersion: 8
-  lengthInSec: 1.05
+  lengthInSec: 2
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -5063,7 +5063,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 20
+      scalar: 40
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -5182,7 +5182,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 0.3
-      minScalar: 0.05000001
+      minScalar: 0.1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -6253,18 +6253,18 @@ ParticleSystem:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
         key1: {r: 0.99215686, g: 0.8, b: 0.3647059, a: 1}
-        key2: {r: 0.9843137, g: 0.7019608, b: 0.27450982, a: 0}
-        key3: {r: 0.5647059, g: 0.1764706, b: 0, a: 0}
-        key4: {r: 0, g: 0, b: 0, a: 0}
+        key2: {r: 0.9914599, g: 0.79128814, b: 0.35669097, a: 0}
+        key3: {r: 0.9843137, g: 0.7019608, b: 0.27450982, a: 0}
+        key4: {r: 0.5647059, g: 0.1764706, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
         ctime0: 0
         ctime1: 18119
-        ctime2: 33731
-        ctime3: 44525
-        ctime4: 54548
-        ctime5: 0
+        ctime2: 26291
+        ctime3: 33731
+        ctime4: 44525
+        ctime5: 54548
         ctime6: 0
         ctime7: 0
         atime0: 0
@@ -6275,9 +6275,9 @@ ParticleSystem:
         atime5: 0
         atime6: 0
         atime7: 0
-        m_Mode: 0
-        m_ColorSpace: -1
-        m_NumColorKeys: 5
+        m_Mode: 2
+        m_ColorSpace: 0
+        m_NumColorKeys: 6
         m_NumAlphaKeys: 3
       minGradient:
         serializedVersion: 2
