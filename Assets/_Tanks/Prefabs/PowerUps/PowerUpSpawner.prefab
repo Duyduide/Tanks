@@ -44,5 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3fbe4e5309cbf643bdf95d525fb14f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PowerUps: []
-  m_RespawnCooldown: 20
+  m_PowerUps:
+  - {fileID: -634342904945570638, guid: 9ad06fe863d692e4a969198bd2130e8c, type: 3}
+  - {fileID: 6879373041450111307, guid: 0359c7746491e7e4a889255dfd046976, type: 3}
+  - {fileID: -7153330678315239972, guid: fc7b7f2ea1b8e2949a71217d6d42bbfb, type: 3}
+  - {fileID: -8337311869866974666, guid: 1fb16119711fde644ab3c13dea73a863, type: 3}
+  - {fileID: -7784930914620267656, guid: eec776bb3b0a1004b92f888bba8d9917, type: 3}
+  - {fileID: 3310508087208768428, guid: 21916af07e754774baa508caf181a2c2, type: 3}
+  m_RespawnCooldown: 10
