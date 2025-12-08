@@ -84,19 +84,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 735273103869587861, guid: 1dc26fee3ca0d7447ac5c1eed55e91e3, type: 3}
       propertyPath: m_MaxDamage
-      value: 100
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 735273103869587861, guid: 1dc26fee3ca0d7447ac5c1eed55e91e3, type: 3}
       propertyPath: m_ShotCooldown
-      value: 1.25
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 735273103869587861, guid: 1dc26fee3ca0d7447ac5c1eed55e91e3, type: 3}
       propertyPath: m_ExplosionForce
-      value: 65
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 735273103869587861, guid: 1dc26fee3ca0d7447ac5c1eed55e91e3, type: 3}
       propertyPath: m_ExplosionRadius
-      value: 5
+      value: 4.5
       objectReference: {fileID: 0}
     - target: {fileID: 1615741284085882437, guid: 1dc26fee3ca0d7447ac5c1eed55e91e3, type: 3}
       propertyPath: m_Speed
@@ -133,6 +133,10 @@ PrefabInstance:
     - target: {fileID: 2402164446738370128, guid: 1dc26fee3ca0d7447ac5c1eed55e91e3, type: 3}
       propertyPath: m_Center.z
       value: 0.1529262
+      objectReference: {fileID: 0}
+    - target: {fileID: 3457286841750047669, guid: 1dc26fee3ca0d7447ac5c1eed55e91e3, type: 3}
+      propertyPath: m_StartingHealth
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 4084118595080948640, guid: 1dc26fee3ca0d7447ac5c1eed55e91e3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -173,6 +177,10 @@ PrefabInstance:
     - target: {fileID: 4084118595080948640, guid: 1dc26fee3ca0d7447ac5c1eed55e91e3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4609187031496866832, guid: 1dc26fee3ca0d7447ac5c1eed55e91e3, type: 3}
+      propertyPath: m_Mass
+      value: 15000
       objectReference: {fileID: 0}
     - target: {fileID: 4888563720864208917, guid: 1dc26fee3ca0d7447ac5c1eed55e91e3, type: 3}
       propertyPath: m_AnchorMax.x
