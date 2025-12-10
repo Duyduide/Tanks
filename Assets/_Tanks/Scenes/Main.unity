@@ -371,7 +371,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -2167,6 +2167,55 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b268cad32d016747980e87b864177bf, type: 3}
+--- !u!1 &1818843847
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1818843849}
+  - component: {fileID: 1818843848}
+  m_Layer: 0
+  m_Name: Global Volume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1818843848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818843847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 1af8b9788d2b82041a478e4e9f586d32, type: 2}
+--- !u!4 &1818843849
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818843847}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 23.36037, y: 18.592155, z: 1.5494711}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2022376718 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 266440578860274663, guid: bdd6454343f36ea498b6277a89dd1ca8, type: 3}
@@ -2267,7 +2316,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2880009307492251475, guid: 5a7a87f32864f0c47b681b27ba0a0f10, type: 3}
       propertyPath: m_IsComputerControlled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4300845190222977155, guid: 5a7a87f32864f0c47b681b27ba0a0f10, type: 3}
       propertyPath: m_MaxDamage
@@ -2380,8 +2429,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6864207430827938166, guid: 2ea9d08cb2b27fb42b4efc58196049bf, type: 3}
+      propertyPath: m_IsDirectControl
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6864207430827938166, guid: 2ea9d08cb2b27fb42b4efc58196049bf, type: 3}
       propertyPath: m_IsComputerControlled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7872265515017002196, guid: 2ea9d08cb2b27fb42b4efc58196049bf, type: 3}
       propertyPath: m_IsActive
@@ -2498,7 +2551,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4225341072908029569, guid: 37b36b50015b7ed4da071888e9672b33, type: 3}
       propertyPath: m_IsComputerControlled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6438445372546739302, guid: 37b36b50015b7ed4da071888e9672b33, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2715,3 +2768,4 @@ SceneRoots:
   - {fileID: 1213291470}
   - {fileID: 133609739}
   - {fileID: 2059542241}
+  - {fileID: 1818843849}
