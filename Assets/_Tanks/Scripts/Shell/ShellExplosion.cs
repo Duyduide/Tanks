@@ -1,8 +1,9 @@
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Tanks.Complete
 {
-    public class ShellExplosion : MonoBehaviour
+    public class ShellExplosion : NetworkBehaviour
     {
         public LayerMask m_TankMask;                        // Used to filter what the explosion affects, this should be set to "Players".
         public ParticleSystem m_ExplosionParticles;         // Reference to the particles that will play on explosion.
@@ -24,6 +25,10 @@ namespace Tanks.Complete
 
         private void OnTriggerEnter (Collider other)
         {
+            // Chỉ Server/Host xử lý logic va chạm và sát thương
+            if (!IsServer)
+                return;
+
 			// Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
             Collider[] colliders = Physics.OverlapSphere (transform.position, m_ExplosionRadius, m_TankMask);
 
@@ -50,12 +55,30 @@ namespace Tanks.Complete
                 // Calculate the amount of damage the target should take based on it's distance from the shell.
                 float damage = CalculateDamage (targetRigidbody.position);
 
-                // Deal this damage to the tank.
-                targetHealth.TakeDamage (damage);
+                // Deal this damage to the tank (sử dụng ServerRpc).
+                targetHealth.TakeDamageServerRpc(damage);
             }
 
+            // Gọi ClientRpc để phát hiệu ứng nổ trên tất cả Clients
+            ExplodeClientRpc(transform.position);
+
+            // Destroy the shell trên Server
+            if (NetworkObject != null && NetworkObject.IsSpawned)
+            {
+                NetworkObject.Despawn();
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        [Rpc(SendTo.Everyone)]
+        private void ExplodeClientRpc(Vector3 explosionPosition)
+        {
             // Unparent the particles from the shell.
             m_ExplosionParticles.transform.parent = null;
+            m_ExplosionParticles.transform.position = explosionPosition;
 
             // Play the particle system.
             m_ExplosionParticles.Play();
@@ -66,9 +89,6 @@ namespace Tanks.Complete
             // Once the particles have finished, destroy the gameobject they are on.
             ParticleSystem.MainModule mainModule = m_ExplosionParticles.main;
             Destroy (m_ExplosionParticles.gameObject, mainModule.duration);
-
-            // Destroy the shell.
-            Destroy (gameObject);
         }
 
 
