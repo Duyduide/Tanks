@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Tanks.Complete
 {
-    public class TankShooting : MonoBehaviour
+    public class TankShooting : NetworkBehaviour
     {
         public Rigidbody m_Shell;                   // Prefab of the shell.
         public Transform m_FireTransform;           // A child of the tank where the shells are spawned.
@@ -66,6 +67,17 @@ namespace Tanks.Complete
             m_InputUser = GetComponent<TankInputUser>();
             if (m_InputUser == null)
                 m_InputUser = gameObject.AddComponent<TankInputUser>();
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            
+            // Nếu không phải là chủ sở hữu, tắt script để ngăn việc đọc Input local
+            if (!IsOwner && !m_IsComputerControlled)
+            {
+                enabled = false;
+            }
         }
 
         private void Start ()
@@ -198,43 +210,73 @@ namespace Tanks.Complete
             // Set the fired flag so only Fire is only called once.
             m_Fired = true;
 
-            // Create an instance of the shell and store a reference to it's rigidbody.
+            // Chỉ chạy hiệu ứng âm thanh/UI cục bộ trên client
+            m_ShootingAudio.clip = m_FireClip;
+            m_ShootingAudio.Play ();
+
+            // Lưu giá trị launch force trước khi reset
+            float fireForce = m_CurrentLaunchForce;
+            
+            // Reset the launch force.  This is a precaution in case of missing button events.
+            m_CurrentLaunchForce = m_MinLaunchForce;
+            m_ShotCooldownTimer = m_ShotCooldown;
+            
+            // Gửi yêu cầu lên Server/Host để sinh đạn với giá trị đã lưu
+            if (IsSpawned)
+            {
+                FireServerRpc(fireForce, m_HasSpecialShell, m_SpecialShellMultiplier);
+            }
+        }
+
+        [Rpc(SendTo.Server)]
+        private void FireServerRpc(float launchForce, bool hasSpecialShell, float specialMultiplier)
+        {
+            // 1. Instantiate shell trên Server
             Rigidbody shellInstance =
                 Instantiate (m_Shell, m_FireTransform.position, m_FireTransform.rotation) as Rigidbody;
 
-            // Set the shell's velocity to the launch force in the fire position's forward direction.
-            shellInstance.linearVelocity = m_CurrentLaunchForce * m_FireTransform.forward;
-
+            // 2. Spawn shell qua mạng (Server sở hữu)
+            var networkObject = shellInstance.GetComponent<NetworkObject>();
+            if (networkObject != null)
+            {
+                networkObject.Spawn();
+            }
+            
+            // 3. Áp dụng vật lý (Chỉ Server/Host xử lý)
+            shellInstance.linearVelocity = launchForce * m_FireTransform.forward;
+            
+            // 4. Cấu hình đạn
             ShellExplosion explosionData = shellInstance.GetComponent<ShellExplosion>();
             explosionData.m_ExplosionForce = m_ExplosionForce;
             explosionData.m_ExplosionRadius = m_ExplosionRadius;
             explosionData.m_MaxDamage = m_MaxDamage;
             
-            // Increase the damage if extra damage PowerUp is active
-            if (m_HasSpecialShell)
+            // 5. Xử lý Special Shell và reset trạng thái
+            if (hasSpecialShell)
             {
-                explosionData.m_MaxDamage *= m_SpecialShellMultiplier;
-                // Reset the default values after increasing the damage of the fired shell
-                m_HasSpecialShell = false;
-                m_SpecialShellMultiplier = 1f;
-                
-                PowerUpDetector powerUpDetector = GetComponent<PowerUpDetector>();
-                if (powerUpDetector != null)
-                    powerUpDetector.m_HasActivePowerUp = false;
+                explosionData.m_MaxDamage *= specialMultiplier;
+                // Gọi ClientRpc để reset trạng thái Special Shell trên tất cả Clients
+                ResetSpecialShellClientRpc();
+            }
+        }
 
-                PowerUpHUD powerUpHUD = GetComponentInChildren<PowerUpHUD>();
-                if (powerUpHUD != null)
-                    powerUpHUD.DisableActiveHUD();
+        [Rpc(SendTo.Everyone)]
+        private void ResetSpecialShellClientRpc()
+        {
+            // Logic reset Special Shell (chạy trên tất cả Clients)
+            m_HasSpecialShell = false;
+            m_SpecialShellMultiplier = 1f;
+            
+            // Reset HUD
+            PowerUpDetector powerUpDetector = GetComponent<PowerUpDetector>();
+            if (powerUpDetector != null)
+            {
+                powerUpDetector.m_HasActivePowerUp = false;
             }
 
-            // Change the clip to the firing clip and play it.
-            m_ShootingAudio.clip = m_FireClip;
-            m_ShootingAudio.Play ();
-
-            // Reset the launch force.  This is a precaution in case of missing button events.
-            m_CurrentLaunchForce = m_MinLaunchForce;
-
-            m_ShotCooldownTimer = m_ShotCooldown;
+            PowerUpHUD powerUpHUD = GetComponentInChildren<PowerUpHUD>();
+            if (powerUpHUD != null)
+                powerUpHUD.DisableActiveHUD();
         }
 
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 
@@ -7,7 +8,7 @@ namespace Tanks.Complete
     //Ensure it run before the TankShooting component as TankShooting grabs the InputUser from this when there are no
     //GameManager set (used during learning experience to test tank in empty scenes)
     [DefaultExecutionOrder(-10)]
-    public class TankMovement : MonoBehaviour
+    public class TankMovement : NetworkBehaviour
     {
         [Tooltip("The player number. Without a tank selection menu, Player 1 is left keyboard control, Player 2 is right keyboard")]
         public int m_PlayerNumber = 1;              // Used to identify which tank belongs to which player.  This is set by this tank's manager.
@@ -51,6 +52,14 @@ namespace Tanks.Complete
             m_InputUser = GetComponent<TankInputUser>();
             if (m_InputUser == null)
                 m_InputUser = gameObject.AddComponent<TankInputUser>();
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            
+            // Non-owner tanks don't process input, but the script stays enabled for physics/animation
+            // Movement will be synchronized via NetworkTransform component
         }
 
 
@@ -150,8 +159,8 @@ namespace Tanks.Complete
 
         private void Update ()
         {
-            // Computer controlled tank will be moved by the TankAI component, so only read input for player controlled tanks
-            if (!m_IsComputerControlled)
+            // Only read input if this is the owner or computer controlled
+            if (!m_IsComputerControlled && IsOwner)
             {
                 m_MovementInputValue = m_MoveAction.ReadValue<float>();
                 m_TurnInputValue = m_TurnAction.ReadValue<float>();
@@ -194,6 +203,11 @@ namespace Tanks.Complete
 
         private void FixedUpdate ()
         {
+            // Only process movement for owner or computer controlled tanks
+            // Non-owner tanks will be moved via NetworkTransform synchronization
+            if (!IsOwner && !m_IsComputerControlled)
+                return;
+                
             // If this is using a gamepad or have direct control enabled, this used a different movement method : instead of
             // "up" behind moving forward for the tank, it instead takes the gamepad move direction as the desired forward for the tank
             // and will compute the speed and rotation needed to move the tank toward that direction.
